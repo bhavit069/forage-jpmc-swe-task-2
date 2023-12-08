@@ -32,8 +32,8 @@ class Graph extends Component<IProps, {}> {
 
   componentDidMount() {
     // Get element to attach the table from the DOM.
-    const elem: PerspectiveViewerElement = document.getElementsByTagName('perspective-viewer')[0] as unknown as PerspectiveViewerElement;
-
+    // const elem: PerspectiveViewerElement = document.getElementsByTagName('perspective-viewer')[0] as unknown as PerspectiveViewerElement;
+    const elem = document.getElementsByTagName('perspective-viewer')[0] as unknown as PerspectiveViewerElement;
     const schema = {
       stock: 'string',
       top_ask_price: 'float',
@@ -49,6 +49,16 @@ class Graph extends Component<IProps, {}> {
 
       // Add more Perspective configurations here.
       elem.load(this.table);
+      elem.setAttribute('view', 'y_line'); // a y-axis grid
+      elem.setAttribute('column-pivots', '["stock"]'); // helps distinguish between stocks
+      elem.setAttribute('row-pivots', '["timestamp"]'); // prevents x axis from being blank
+      elem.setAttribute('colums', '["top_ask_price"]'); // helps plot different datapoints such as top-ask top-bid 
+      elem.setAttribute('aggregates', ` 
+        {"stock": "distinct count",
+        "top_ask_price": "avg",
+        "top_bid_price": "avg",
+        "timestamp": "distinct count"}`);
+      }
     }
   }
 
